@@ -68,7 +68,8 @@ static SingleCallController *callManager = nil;
     NSString*msgId = [conversation latestMessage].messageId;
     [[EaseCallManager sharedManager] startSingleCallWithUId:_chatter type:aType ext:nil completion:^(NSString * callId, EaseCallError * aError) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1000), dispatch_get_main_queue(), ^{
-                [conversation loadMessagesStartFromId:msgId count:50 searchDirection:EMMessageSearchDirectionDown completion:^(NSArray *aMessages, EMError *aError) {
+                [conversation loadMessagesStartFromId:msgId count:50 searchDirection:msgId?EMMessageSearchDirectionDown:EMMessageSearchDirectionUp completion:^(NSArray *aMessages, EMError *aError) {
+                    EMMessage* msg = [aMessages objectAtIndex:0];
                     [self insertLocationCallRecord:aMessages];
                 }];
             });
@@ -82,7 +83,7 @@ static SingleCallController *callManager = nil;
 - (void)insertLocationCallRecord:(NSArray*)messages
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:EMCOMMMUNICATE_RECORD object:@{@"msg":messages}];//刷新页面
-//    EMMessage *message = [[EMMessage alloc] initWithConversationID:callSession.remoteName from:from to:to body:body ext:ext];
+   // EMMessage *message = [[EMMessage alloc] initWithConversationID:callSession.remoteName from:from to:to body:body ext:ext];
 //    message.direction = [from isEqualToString:[[EMClient sharedClient] currentUsername]] ? EMMessageDirectionSend : EMMessageDirectionReceive;
 //    message.chatType = EMChatTypeChat;
 //    [conversation appendMessage:message error:nil];

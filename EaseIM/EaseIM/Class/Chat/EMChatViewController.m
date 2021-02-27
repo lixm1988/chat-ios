@@ -33,7 +33,7 @@
         _conversation = [EMClient.sharedClient.chatManager getConversation:conversationId type:conType createIfNotExist:YES];
         _conversationModel = [[EaseConversationModel alloc]initWithConversation:_conversation];
         EaseChatViewModel *viewModel = [[EaseChatViewModel alloc]init];
-        _chatController = [[EaseChatViewController alloc] initWithConversationId:conversationId
+        _chatController = [EaseChatViewController initWithConversationId:conversationId
                                                     conversationType:conType
                                                         chatViewModel:viewModel];
         [_chatController setEditingStatusVisible:[EMDemoOptions sharedOptions].isChatTyping];
@@ -149,9 +149,9 @@
 //对方输入状态
 - (void)beginTyping
 {
-    if (EMDemoOptions.sharedOptions.isChatTyping) {
+    //if (EMDemoOptions.sharedOptions.isChatTyping) {
         self.titleDetailLabel.text = @"对方正在输入";
-    }
+    //}
 }
 - (void)endTyping
 {
@@ -281,7 +281,7 @@
     __weak typeof(self) weakself = self;
     void (^block)(NSArray *aMessages, EMError *aError) = ^(NSArray *aMessages, EMError *aError) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakself.chatController refreshTableViewWithData:aMessages isScrollBottom:isScrollBottom];
+            [weakself.chatController refreshTableViewWithData:aMessages isInsertBottom:NO isScrollBottom:isScrollBottom];
         });
     };
     
@@ -453,7 +453,7 @@
     if (self.conversation.type == EMConversationTypeGroupChat) {
         [self.chatController cleanPopupControllerView];
         __weak typeof(self) weakself = self;
-        EMGroupInfoViewController *groupInfocontroller = [[EMGroupInfoViewController alloc] initWithGroupId:self.conversation.conversationId];
+        EMGroupInfoViewController *groupInfocontroller = [[EMGroupInfoViewController alloc] initWithConversation:self.conversation];
         [groupInfocontroller setLeaveOrDestroyCompletion:^{
             [weakself.navigationController popViewControllerAnimated:YES];
         }];
