@@ -98,8 +98,11 @@ static EaseGroupMemberAttributesCache *instance = nil;
                         }
                     }
                     
+                } else {
+                    for (NSString *userNameKey in attributes.allKeys) {
+                        [self.userNames removeObject:userNameKey];
+                    }
                 }
-                [self.userNames removeObject:attributes.allKeys.firstObject];
                 if (completion) {
                     completion(error,value);
                 }
