@@ -62,11 +62,6 @@ class MineMessageEntity: MessageEntity {
                 if let something = self.message.ext?["something"] as? String {
                     if let threadName = self.message.ext?["threadName"] as? String {
                         let range = something.chat.rangeOfString(threadName)
-                        text.append(NSAttributedString {
-                            AttributedText(something).foregroundColor(Theme.style == .dark ? Color.theme.neutralColor6:Color.theme.neutralColor7).font(UIFont.theme.bodySmall).lineHeight(multiple: 1.15, minimum: 14).alignment(.center)
-                        })
-                        text.addAttribute(NSAttributedString.Key.foregroundColor, value: Theme.style == .dark ? Color.theme.primaryColor6:Color.theme.primaryColor5, range: range)
-                    } else {
                         let user = self.message.user
                         var nickname = user?.remark ?? ""
                         if nickname.isEmpty {
@@ -78,6 +73,11 @@ class MineMessageEntity: MessageEntity {
                         text.append(NSMutableAttributedString {
                             AttributedText(nickname).foregroundColor(Theme.style == .dark ? Color.theme.neutralColor6:Color.theme.neutralColor7).font(UIFont.theme.labelSmall).lineHeight(multiple: 1.15, minimum: 14).alignment(.center)
                         })
+                        text.append(NSAttributedString {
+                            AttributedText(something).foregroundColor(Theme.style == .dark ? Color.theme.neutralColor6:Color.theme.neutralColor7).font(UIFont.theme.bodySmall).lineHeight(multiple: 1.15, minimum: 14).alignment(.center)
+                        })
+                        text.addAttribute(NSAttributedString.Key.foregroundColor, value: Theme.style == .dark ? Color.theme.primaryColor6:Color.theme.primaryColor5, range: range)
+                    } else {
                         text.append(NSAttributedString {
                             AttributedText(" "+something).foregroundColor(Theme.style == .dark ? Color.theme.neutralColor6:Color.theme.neutralColor7).font(UIFont.theme.bodySmall).lineHeight(multiple: 1.15, minimum: 14).alignment(.center)
                         })
